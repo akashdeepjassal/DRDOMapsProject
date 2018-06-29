@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml smlns="http://earth.google.com/kml/2.0">
+  <Document>
+    <Style id="yellow_style">
+      <LineStyle>
+        <width>2</width>
+        <color>ff00ffff</color>
+      </LineStyle>
+    </Style>
+    <Style id="blue_style">
+      <LineStyle>
+        <width>2</width>
+        <color>ffff0000</color>
+      </LineStyle>
+    </Style>
+    <Style id="green_style">
+      <LineStyle>
+        <width>2</width>
+        <color>ff00ff00</color>
+      </LineStyle>
+    </Style>
+    <Style id="red_style">
+      <LineStyle>
+        <width>2</width>
+        <color>ff0000ff</color>
+      </LineStyle>
+    </Style>
+    <Style id="orange_style">
+      <LineStyle>
+        <width>2</width>
+        <color>ff007eff</color>
+      </LineStyle>
+    </Style>
+    <Style id="white_style">
+      <LineStyle>
+        <width>2</width>
+        <color>fffbfafc</color>
+      </LineStyle>
+    </Style>
+
+	<StyleMap id="Orange">
+		<Pair>
+		  <key>normal</key>
+		  <styleUrl>#orange_style</styleUrl>
+		</Pair>
+		<Pair>
+		  <key>highlight</key>
+		  <styleUrl>#white_style</styleUrl>
+		</Pair>
+	</StyleMap>
+
+	<StyleMap id="Yellow">
+		<Pair>
+		  <key>normal</key>
+		  <styleUrl>#yellow_style</styleUrl>
+		</Pair>
+		<Pair>
+		  <key>highlight</key>
+		  <styleUrl>#white_style</styleUrl>
+		</Pair>
+	</StyleMap>
+	
+	<StyleMap id="Blue">
+		<Pair>
+		  <key>normal</key>
+		  <styleUrl>#blue_style</styleUrl>
+		</Pair>
+		<Pair>
+		  <key>highlight</key>
+		  <styleUrl>#white_style</styleUrl>
+		</Pair>
+	</StyleMap>
+
+	<StyleMap id="Green">
+		<Pair>
+		  <key>normal</key>
+		  <styleUrl>#green_style</styleUrl>
+		</Pair>
+		<Pair>
+		  <key>highlight</key>
+		  <styleUrl>#white_style</styleUrl>
+		</Pair>
+	</StyleMap>
+
+	<StyleMap id="Red">
+		<Pair>
+		  <key>normal</key>
+		  <styleUrl>#red_style</styleUrl>
+		</Pair>
+		<Pair>
+		  <key>highlight</key>
+		  <styleUrl>#white_style</styleUrl>
+		</Pair>
+	</StyleMap>
+
+<Folder>
+<name>Uttarakhand Maps</name>
+
+<Placemark><name>1808 Webb Map of Ganges Exploration.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/1808 Webb Map of Ganges Exploration.jpg'>1808 Webb Map of Ganges Exploration.jpg</a></description><styleUrl>#Orange</styleUrl><LineString><coordinates>78,32 80,32 80,29 78,29 78,32</coordinates></LineString></Placemark><Placemark><name>1850 Kumaon and British Garhwal.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/1850 Kumaon and British Garhwal.jpg'>1850 Kumaon and British Garhwal.jpg</a></description><styleUrl>#Yellow</styleUrl><LineString><coordinates>78,32 81.5,32 81.5,28.5 78,28.5 78,32</coordinates></LineString></Placemark><Placemark><name>1879 Dehra Dun and Siwaliks 63360.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/1879 Dehra Dun and Siwaliks 63360.jpg'>1879 Dehra Dun and Siwaliks 63360.jpg</a></description><styleUrl>#Yellow</styleUrl><LineString><coordinates>77.83,30.541 78.375,30.541 78.375,30.208 77.83,30.208 77.83,30.541</coordinates></LineString></Placemark><Placemark><name>1900 Indian Atlas Sheet 65 from Shipki to Tirthapuri.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/1900 Indian Atlas Sheet 65 from Shipki to Tirthapuri.jpg'>1900 Indian Atlas Sheet 65 from Shipki to Tirthapuri.jpg</a></description><styleUrl>#Blue</styleUrl><LineString><coordinates>78.42,32.1 81,32.1 81,30.86 78.42,30.86 78.42,32.1</coordinates></LineString></Placemark><Placemark><name>1978 Uttarakhand Rivers and Streams by Mehta.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/1978 Uttarakhand Rivers and Streams by Mehta.jpg'>1978 Uttarakhand Rivers and Streams by Mehta.jpg</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>77.7,31.2 81,31.2 81,28.9 77.7,28.9 77.7,31.2</coordinates></LineString></Placemark><Placemark><name>1987 H-44-XIV Russian Map.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/1987 H-44-XIV Russian Map.jpg'>1987 H-44-XIV Russian Map.jpg</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>79,30.67 80,30.67 80,30 79,30 79,30.67</coordinates></LineString></Placemark><Placemark><name>1987 H-44-XXI Russian Map.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/1987 H-44-XXI Russian Map.jpg'>1987 H-44-XXI Russian Map.jpg</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>80,30 81,30 81,29.33 80,29.33 80,30</coordinates></LineString></Placemark><Placemark><name>1987 I-44-XV Russian Map.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/1987 I-44-XV Russian Map.jpg'>1987 I-44-XV Russian Map.jpg</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>80,30.67 81,30.67 81,30 80,30 80,30.67</coordinates></LineString></Placemark><Placemark><name>1992 Himalayan Garhwal East by Swiss.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/1992 Himalayan Garhwal East by Swiss.jpg'>1992 Himalayan Garhwal East by Swiss.jpg</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>79.31,31.11 80.5,31.11 80.5,30 79.31,30 79.31,31.11</coordinates></LineString></Placemark><Placemark><name>1992 Himalayan Garhwal West by Swiss.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/1992 Himalayan Garhwal West by Swiss.jpg'>1992 Himalayan Garhwal West by Swiss.jpg</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>78,31.5 79.58,31.5 79.58,30.33 78,30.33 78,31.5</coordinates></LineString></Placemark><Placemark><name>2001 Uttarakhand Block Map.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/2001 Uttarakhand Block Map.jpg'>2001 Uttarakhand Block Map.jpg</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>77.5,31.3 81.1,31.3 81.1,28.9 77.5,28.9 77.5,31.3</coordinates></LineString></Placemark><Placemark><name>2003 Uttaranchal in Hindi by Survey of India.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/2003 Uttaranchal in Hindi by Survey of India.jpg'>2003 Uttaranchal in Hindi by Survey of India.jpg</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>77.5,31.3 81.1,31.3 81.1,28.9 77.5,28.9 77.5,31.3</coordinates></LineString></Placemark><Placemark><name>2004 Uttarakhand by Pahar.jpg</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/2004 Uttarakhand by Pahar.jpg'>2004 Uttarakhand by Pahar.jpg</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>77.5,31.3 81.1,31.3 81.1,28.9 77.5,28.9 77.5,31.3</coordinates></LineString></Placemark><Placemark><name>2004 Uttarakhand Map by Pahar in Hindi.pdf</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/2004 Uttarakhand Map by Pahar in Hindi.pdf'>2004 Uttarakhand Map by Pahar in Hindi.pdf</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>77.5,31.3 81.1,31.3 81.1,28.9 77.5,28.9 77.5,31.3</coordinates></LineString></Placemark><Placemark><name>2006 Uttarakhand with Historical Annotations by Rawat.pdf</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/2006 Uttarakhand with Historical Annotations by Rawat.pdf'>2006 Uttarakhand with Historical Annotations by Rawat.pdf</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>77.5,31.3 81.1,31.3 81.1,28.9 77.5,28.9 77.5,31.3</coordinates></LineString></Placemark><Placemark><name>2007 Uttarakhand River System.pdf</name><description><a href='http://pahar.in/pahar/Maps--Primary/Indian Subcontinent/Uttarakhand Maps/2007 Uttarakhand River System.pdf'>2007 Uttarakhand River System.pdf</a></description><styleUrl>#Green</styleUrl><LineString><coordinates>77.5,31.3 81.1,31.3 81.1,28.9 77.5,28.9 77.5,31.3</coordinates></LineString></Placemark>
+
+</Folder>
+	
+  </Document>
+</kml>
