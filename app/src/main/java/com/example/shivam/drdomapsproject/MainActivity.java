@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         double rain_fall_sum_day_4  =  list_sum(sub_list,24,31);
         RainModel total_rain = quantify_rainfall(rain_fall_sum_day_1,rain_fall_sum_day_2,rain_fall_sum_day_3,rain_fall_sum_day_4);
         //will return rain object here, with total rain and number of hourse of event
+        String result = classify_rainfall(total_rain);
         tinyDB.putString("rain","light");
         tinyDB.putDouble("lat",31.0439);
         tinyDB.putDouble("lon",78.8418);
@@ -122,10 +123,26 @@ public class MainActivity extends AppCompatActivity {
             //Added the event of the first day, now considering the event of previous day
             if (sum2>0.1){
                 //Inside Valid Zone for Day 2
-                
-            }
+                rainModel.setRain_fall(sum1+sum2);
+                rainModel.setHours(48);
+                if (sum3>0.1){
+                    rainModel.setRain_fall(sum1+sum2+sum3);
+                    rainModel.setHours(72);
+                    if (sum4>0.1){
+                        rainModel.setRain_fall(sum1+sum2+sum3+sum4);
+                        rainModel.setHours(96);
+                    }
+                }
+
             }
 
+
+
+            }
+else {
+            rainModel.setHours(0);
+            rainModel.setRain_fall(0.00);
+        }
 
     return rainModel;
     }
@@ -137,6 +154,17 @@ public class MainActivity extends AppCompatActivity {
            sum+=list.get(i);
         }
         return sum;
+    }
+    public String classify_rainfall(RainModel rainModel){
+
+        //Calculate the Intensity Here By Using the Object here
+        double intensity = rainModel.getRain_fall()/rainModel.getHours();
+
+        //Apply The Equation On Intensity Here and return status String according the result
+
+
+
+        return null;
     }
 
 
