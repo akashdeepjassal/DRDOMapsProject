@@ -2,6 +2,7 @@ package com.example.shivam.drdomapsproject;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -56,13 +57,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .position(sydney)
                 .title("status:  "+tinyDB.getString("rain")));
         retrieveFileFromResource();
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
     private void retrieveFileFromResource() {
         try {
             KmlLayer kmlLayer = new KmlLayer(mMap, R.raw.uttarakhand_district, getApplicationContext());
             kmlLayer.addLayerToMap();
-           // moveCameraToKml(kmlLayer);
+            moveCameraToKml(kmlLayer);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XmlPullParserException e) {
@@ -72,7 +74,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void moveCameraToKml(KmlLayer kmlLayer) {
         //Retrieve the first container in the KML layer
         KmlContainer container = kmlLayer.getContainers().iterator().next();
+        if (container.hasProperties()) {
+            Toast.makeText(MapsActivity.this,"Has Property",Toast.LENGTH_LONG).show();
+        }
         //Retrieve a nested container within the first container
+       /*
         container = container.getContainers().iterator().next();
         //Retrieve the first placemark in the nested container
         KmlPlacemark placemark = container.getPlacemarks().iterator().next();
@@ -87,6 +93,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), width, height, 1));
+    }*/
     }
-
 }

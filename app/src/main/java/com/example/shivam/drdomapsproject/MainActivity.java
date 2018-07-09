@@ -12,9 +12,14 @@ import com.kwabenaberko.openweathermaplib.Units;
 import com.kwabenaberko.openweathermaplib.implementation.OpenWeatherMapHelper;
 import com.kwabenaberko.openweathermaplib.models.threehourforecast.ThreeHourForecast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import az.openweatherapi.OWService;
 import az.openweatherapi.listener.OWRequestListener;
@@ -58,10 +63,20 @@ public class MainActivity extends AppCompatActivity {
                     if (weatherForecastElement.getRain().get3h()!=null){
                         rain_data_list.add(weatherForecastElement.getRain().get3h());
                         Log.e("My Tag: ","   "+weatherForecastElement.getRain().get3h());
+                        Date date = new Date(weatherForecastElement.getDt()*1000L);
+                        SimpleDateFormat jdf = new SimpleDateFormat("yyMMddHHmmssZ");
+                        jdf.setTimeZone(TimeZone.getTimeZone("GMT-4"));
+                        String java_date = jdf.format(date).substring(0,13);
+                        Log.e("mY Tag: Date: ",java_date);
+
+
+                    }
+                    else {
+                        rain_data_list.add(0.00);
+                        Log.e("My Tag: ","   0");
 
                     }
                 }
-
                 applyEquations(rain_data_list);
                 //double rain  = extendedWeather.getList().get(1).getRain().get3h();
                 //Toast.makeText(MainActivity.this,"HJVHBKJ "+rain,Toast.LENGTH_LONG).show();
@@ -77,14 +92,44 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void applyEquations(List<Double> rain_list){
-    //Perform the equations on the data
 
-    tinyDB.putString("rain","light");
-    tinyDB.putDouble("lat",31.0439);
-    tinyDB.putDouble("lon",78.8418);
+        List<Double> my_list = rain_list;
+        Collections.reverse(my_list);
+        List<Double> sub_list = my_list.subList(0,32);
+        Log.e("Size of List:",sub_list.size()+" ");
+        double rain_fall_sum_day_1  =  list_sum(sub_list,0,7);
+        double rain_fall_sum_day_2  =  list_sum(sub_list,8,15);
+        double rain_fall_sum_day_3  =  list_sum(sub_list,16,23);
+        double rain_fall_sum_day_4  =  list_sum(sub_list,24,31);
+
+
+
+
+
+
+        tinyDB.putString("rain","light");
+        tinyDB.putDouble("lat",31.0439);
+        tinyDB.putDouble("lon",78.8418);
+
         Intent intent = new Intent(MainActivity.this,MapsActivity.class);
         startActivity(intent);
     }
+
+
+    public void quantify_rainfall(double sum1,double sum2,double sum3,double sum4){
+
+
+    }
+
+
+    public double list_sum(List<Double> list, int start_index,int end_index){
+       double sum = 0.00;
+        for (int i=start_index;i<=end_index;i++){
+           sum+=list.get(i);
+        }
+        return sum;
+    }
+
 
 }
 
@@ -93,26 +138,3 @@ public class MainActivity extends AppCompatActivity {
 
 
 
- /*mOWService.getCurrentDayForecast(coordinate, new OWRequestListener<CurrentWeather>() {
-            @Override
-            public void onResponse(OWResponse<CurrentWeather> response) {
-                CurrentWeather currentWeather = response.body();
-                //Do something with the object here!
-                double temp =  currentWeather.getMain().getTemp();
-                int humidity =  currentWeather.getMain().getHumidity();
-
-                if (currentWeather.getRain()==null){
-                    Toast.makeText(MainActivity.this,"NULL VALUE",Toast.LENGTH_LONG).show();
-                }
-                else {
-                    Toast.makeText(MainActivity.this,"NOT NULL"+ currentWeather.getRain().get3h(),Toast.LENGTH_LONG).show();
-                }
-                Log.e("Main Activity: ",String.valueOf(temp) +" "+ String.valueOf(humidity)+"    these are values");
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.e("Main Activity: ", "Current Day Forecast request failed: " + t.getMessage());
-            }
-        });
-*/
