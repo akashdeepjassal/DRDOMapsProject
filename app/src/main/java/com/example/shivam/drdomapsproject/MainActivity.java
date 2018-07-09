@@ -26,6 +26,7 @@ import az.openweatherapi.listener.OWRequestListener;
 import az.openweatherapi.model.OWResponse;
 import az.openweatherapi.model.gson.common.Coord;
 import az.openweatherapi.model.gson.common.Main;
+import az.openweatherapi.model.gson.common.Rain;
 import az.openweatherapi.model.gson.current_day.CurrentWeather;
 import az.openweatherapi.model.gson.five_day.ExtendedWeather;
 import az.openweatherapi.model.gson.five_day.WeatherForecastElement;
@@ -101,12 +102,8 @@ public class MainActivity extends AppCompatActivity {
         double rain_fall_sum_day_2  =  list_sum(sub_list,8,15);
         double rain_fall_sum_day_3  =  list_sum(sub_list,16,23);
         double rain_fall_sum_day_4  =  list_sum(sub_list,24,31);
-
-
-
-
-
-
+        RainModel total_rain = quantify_rainfall(rain_fall_sum_day_1,rain_fall_sum_day_2,rain_fall_sum_day_3,rain_fall_sum_day_4);
+        //will return rain object here, with total rain and number of hourse of event
         tinyDB.putString("rain","light");
         tinyDB.putDouble("lat",31.0439);
         tinyDB.putDouble("lon",78.8418);
@@ -116,9 +113,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void quantify_rainfall(double sum1,double sum2,double sum3,double sum4){
+    public RainModel quantify_rainfall(double sum1, double sum2, double sum3, double sum4){
+        RainModel rainModel =  new RainModel() ;
+        if (sum1 > 0.1){
+                //Applied Lower Limit
+                rainModel.setRain_fall(sum1);
+                rainModel.setHours(24);
+            //Added the event of the first day, now considering the event of previous day
+            if (sum2>0.1){
+                //Inside Valid Zone for Day 2
+                
+            }
+            }
 
 
+    return rainModel;
     }
 
 
