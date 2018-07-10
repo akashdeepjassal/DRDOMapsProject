@@ -2,12 +2,14 @@ package com.example.shivam.drdomapsproject;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -24,12 +26,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     TinyDB tinyDB;
-
+    DAOModel daoModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         tinyDB = new TinyDB(MapsActivity.this);
+        daoModel = tinyDB.getObject("dao",DAOModel.class);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -52,10 +55,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(tinyDB.getDouble("lat",31.0439), tinyDB.getDouble("lon",78.8418));
+        if (daoModel.getResult()==0){
+            mMap.addMarker(new MarkerOptions()
+                    .position(sydney).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    .title("status:  "+daoModel.getResult()));
 
-        mMap.addMarker(new MarkerOptions()
-                .position(sydney)
-                .title("status:  "+tinyDB.getString("rain")));
+        }
+        else {
+            mMap.addMarker(new MarkerOptions()
+                    .position(sydney).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                    .title("status:  "+daoModel.getResult()));
+
+        }
         retrieveFileFromResource();
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
@@ -74,7 +85,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void moveCameraToKml(KmlLayer kmlLayer) {
         //Retrieve the first container in the KML layer
         KmlContainer container = kmlLayer.getContainers().iterator().next();
+
         if (container.hasProperties()) {
+            Log.e("tag","true");
             Toast.makeText(MapsActivity.this,"Has Property",Toast.LENGTH_LONG).show();
         }
         //Retrieve a nested container within the first container

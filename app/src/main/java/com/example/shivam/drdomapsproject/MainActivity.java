@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
                         Date date = new Date(weatherForecastElement.getDt()*1000L);
                         SimpleDateFormat jdf = new SimpleDateFormat("yyMMddHHmmssZ");
                         jdf.setTimeZone(TimeZone.getTimeZone("GMT-4"));
-                        String java_date = jdf.format(date).substring(0,13);
-                        Log.e("mY Tag: Date: ",java_date);
+                        String java_date = jdf.format(date).substring(0,12);
+                  //      Log.e("mY Tag: Date: ",java_date);
 
 
                     }
@@ -104,10 +104,15 @@ public class MainActivity extends AppCompatActivity {
         double rain_fall_sum_day_4  =  list_sum(sub_list,24,31);
         RainModel total_rain = quantify_rainfall(rain_fall_sum_day_1,rain_fall_sum_day_2,rain_fall_sum_day_3,rain_fall_sum_day_4);
         //will return rain object here, with total rain and number of hourse of event
-        String result = classify_rainfall(total_rain);
+        int result = classify_rainfall(total_rain);
+        DAOModel daoModel = new DAOModel();
+        daoModel.setLat(31.0439);
+        daoModel.setLon(78.8418);
+        daoModel.setResult(result);
         tinyDB.putString("rain","light");
         tinyDB.putDouble("lat",31.0439);
         tinyDB.putDouble("lon",78.8418);
+        tinyDB.putObject("dao",daoModel);
 
         Intent intent = new Intent(MainActivity.this,MapsActivity.class);
         startActivity(intent);
@@ -116,19 +121,19 @@ public class MainActivity extends AppCompatActivity {
 
     public RainModel quantify_rainfall(double sum1, double sum2, double sum3, double sum4){
         RainModel rainModel =  new RainModel() ;
-        if (sum1 > 0.1){
+        if (sum1 > 0.5){
                 //Applied Lower Limit
                 rainModel.setRain_fall(sum1);
                 rainModel.setHours(24);
             //Added the event of the first day, now considering the event of previous day
-            if (sum2>0.1){
+            if (sum2>0.5){
                 //Inside Valid Zone for Day 2
                 rainModel.setRain_fall(sum1+sum2);
                 rainModel.setHours(48);
-                if (sum3>0.1){
+                if (sum3>0.5){
                     rainModel.setRain_fall(sum1+sum2+sum3);
                     rainModel.setHours(72);
-                    if (sum4>0.1){
+                    if (sum4>0.5){
                         rainModel.setRain_fall(sum1+sum2+sum3+sum4);
                         rainModel.setHours(96);
                     }
@@ -155,16 +160,21 @@ else {
         }
         return sum;
     }
-    public String classify_rainfall(RainModel rainModel){
+    public int classify_rainfall(RainModel rainModel){
 
         //Calculate the Intensity Here By Using the Object here
         double intensity = rainModel.getRain_fall()/rainModel.getHours();
 
         //Apply The Equation On Intensity Here and return status String according the result
 
+        double val = 12.12354*Math.pow(rainModel.getHours(),-0.73361977);
+        if (intensity<val){
+            return 0;
+        }
+        else {
+            return 1;
+        }
 
-
-        return null;
     }
 
 
