@@ -1,46 +1,30 @@
 package com.example.shivam.drdomapsproject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import az.openweatherapi.model.gson.common.Coord;
+
 /**
  * Created by shivam on 11/7/18.
  */
 
 public class DAOModel {
-    public double lat = 0.00;
-    public double lon = 0.00;
+
+    List<LocationModel> location_models ;
+
+    public List<LocationModel> getLocation_models() {
+        return location_models;
+    }
+
+    public void setLocation_models(List<LocationModel> location_models) {
+        this.location_models = location_models;
+    }
 
     public DAOModel() {
+        location_models =new ArrayList<>();
     }
 
-    public double getLat() {
-        return lat;
-    }
 
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    public int getResult() {
-        return result;
-    }
-
-    public void setResult(int result) {
-        this.result = result;
-    }
-
-    public DAOModel(double lat, double lon, int result) {
-        this.lat = lat;
-        this.lon = lon;
-        this.result = result;
-    }
-
-    public int result = 0;
 
 }

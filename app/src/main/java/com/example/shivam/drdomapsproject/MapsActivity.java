@@ -21,11 +21,14 @@ import com.google.maps.android.data.kml.KmlPolygon;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     TinyDB tinyDB;
+    List<LocationModel> locationModels;
     DAOModel daoModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         tinyDB = new TinyDB(MapsActivity.this);
         daoModel = tinyDB.getObject("dao",DAOModel.class);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        locationModels =  daoModel.getLocation_models();
+        Log.e("Location Model Size:"," "+locationModels.size());
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -53,59 +57,59 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(tinyDB.getDouble("lat",31.0439), tinyDB.getDouble("lon",78.8418));
-        if (daoModel.getResult()==0){
+
+            LatLng a = new LatLng(locationModels.get(0).getLatitude(),locationModels.get(0).getLongitude());
+            LatLng b = new LatLng(locationModels.get(1).getLatitude(),locationModels.get(1).getLongitude());
+            LatLng c = new LatLng(locationModels.get(2).getLatitude(),locationModels.get(2).getLongitude());
+            LatLng d = new LatLng(locationModels.get(3).getLatitude(),locationModels.get(3).getLongitude());
+            LatLng e = new LatLng(locationModels.get(4).getLatitude(),locationModels.get(4).getLongitude());
+            LatLng f = new LatLng(locationModels.get(5).getLatitude(),locationModels.get(5).getLongitude());
+            LatLng g = new LatLng(locationModels.get(6).getLatitude(),locationModels.get(6).getLongitude());
+
             mMap.addMarker(new MarkerOptions()
-                    .position(sydney).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                    .title("status:  "+daoModel.getResult()));
-
-        }
-        else {
-            mMap.addMarker(new MarkerOptions()
-                    .position(sydney).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                    .title("status:  "+daoModel.getResult()));
-
-        }
-        retrieveFileFromResource();
-
+                        .position(a).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        .title("status:  " + locationModels.get(0).getResult()));
+                Log.e("Added ", "true" + a.latitude+" "+a.longitude);
+        mMap.addMarker(new MarkerOptions()
+                .position(b).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("status:  " + locationModels.get(1).getResult()));
+        Log.e("Added ", "true" + a.latitude+" "+a.longitude);
+        mMap.addMarker(new MarkerOptions()
+                .position(c).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("status:  " + locationModels.get(2).getResult()));
+        Log.e("Added ", "true" + a.latitude+" "+a.longitude);
+        mMap.addMarker(new MarkerOptions()
+                .position(d).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("status:  " + locationModels.get(3).getResult()));
+        Log.e("Added ", "true" + a.latitude+" "+a.longitude);mMap.addMarker(new MarkerOptions()
+                .position(e).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("status:  " + locationModels.get(4).getResult()));
+        Log.e("Added ", "true" + a.latitude+" "+a.longitude);
+        mMap.addMarker(new MarkerOptions()
+                .position(f).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("status:  " + locationModels.get(5).getResult()));
+        Log.e("Added ", "true" + a.latitude+" "+a.longitude);
+        mMap.addMarker(new MarkerOptions()
+                .position(g).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .title("status:  " + locationModels.get(6).getResult()));
+        Log.e("Added ", "true" + a.latitude+" "+a.longitude);
+        //retrieveFileFromResource();
+        LatLng sydney = new LatLng(locationModels.get(3).getLatitude(),locationModels.get(3).getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
     private void retrieveFileFromResource() {
         try {
             KmlLayer kmlLayer = new KmlLayer(mMap, R.raw.uttarakhand_district, getApplicationContext());
+            KmlLayer kmlLayer1 = new KmlLayer(mMap, R.raw.landslide, getApplicationContext());
+
             kmlLayer.addLayerToMap();
-            moveCameraToKml(kmlLayer);
+            kmlLayer1.addLayerToMap();
+           // moveCameraToKml(kmlLayer);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
     }
-    private void moveCameraToKml(KmlLayer kmlLayer) {
-        //Retrieve the first container in the KML layer
-        KmlContainer container = kmlLayer.getContainers().iterator().next();
 
-        if (container.hasProperties()) {
-            Log.e("tag","true");
-            Toast.makeText(MapsActivity.this,"Has Property",Toast.LENGTH_LONG).show();
-        }
-        //Retrieve a nested container within the first container
-       /*
-        container = container.getContainers().iterator().next();
-        //Retrieve the first placemark in the nested container
-        KmlPlacemark placemark = container.getPlacemarks().iterator().next();
-        //Retrieve a polygon object in a placemark
-        KmlPolygon polygon = (KmlPolygon) placemark.getGeometry();
-        //Create LatLngBounds of the outer coordinates of the polygon
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (LatLng latLng : polygon.getOuterBoundaryCoordinates()) {
-            builder.include(latLng);
-        }
-
-        int width = getResources().getDisplayMetrics().widthPixels;
-        int height = getResources().getDisplayMetrics().heightPixels;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), width, height, 1));
-    }*/
-    }
 }

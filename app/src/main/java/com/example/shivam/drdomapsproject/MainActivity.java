@@ -4,30 +4,24 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.kwabenaberko.openweathermaplib.Lang;
-import com.kwabenaberko.openweathermaplib.Units;
-import com.kwabenaberko.openweathermaplib.implementation.OpenWeatherMapHelper;
-import com.kwabenaberko.openweathermaplib.models.threehourforecast.ThreeHourForecast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.Semaphore;
 
 import az.openweatherapi.OWService;
 import az.openweatherapi.listener.OWRequestListener;
 import az.openweatherapi.model.OWResponse;
 import az.openweatherapi.model.gson.common.Coord;
-import az.openweatherapi.model.gson.common.Main;
-import az.openweatherapi.model.gson.common.Rain;
-import az.openweatherapi.model.gson.current_day.CurrentWeather;
 import az.openweatherapi.model.gson.five_day.ExtendedWeather;
 import az.openweatherapi.model.gson.five_day.WeatherForecastElement;
 import az.openweatherapi.utils.OWSupportedUnits;
@@ -35,64 +29,98 @@ import az.openweatherapi.utils.OWSupportedUnits;
 public class MainActivity extends AppCompatActivity {
     OWService mOWService;
     TextView textView;
+    Button view_files,go_to_map,show_route;
+    List<Coord> locationModels ;
     TinyDB tinyDB;
+    List<LocationModel> dao_list;
+    DAOModel daoModel;
     List<Double> rain_data_list;
 
     @Override
-    //TODO : Pass the rainfall array values into equations and plot the results on the map.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        locationModels = new ArrayList<>();
         rain_data_list = new ArrayList<>();
+        daoModel = new DAOModel();
+        dao_list = new ArrayList<>();
+        show_route = (Button)findViewById(R.id.show_route);
+        show_route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,ShowRoute.class);
+                startActivity(intent);
+            }
+        });
+        go_to_map = (Button)findViewById(R.id.go_to_map);
+        view_files = (Button)findViewById(R.id.view_files_button);
         textView = (TextView)findViewById(R.id.my_text);
         mOWService = new OWService("f512468636ab7a42a5354384b04d1b6e");
         mOWService.setLanguage(Locale.ENGLISH);
         tinyDB = new TinyDB(MainActivity.this);
         mOWService.setMetricUnits(OWSupportedUnits.METRIC);
-        Coord coordinate = new Coord();
-        coordinate.setLat(31.0439);
-        coordinate.setLon(78.8418);
-
-
-        mOWService.getFiveDayForecast(coordinate, new OWRequestListener<ExtendedWeather>() {
+        view_files.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(OWResponse<ExtendedWeather> response) {
-                ExtendedWeather extendedWeather = response.body();
-                //Do something with the object here!
-                for (WeatherForecastElement weatherForecastElement : extendedWeather.getList()){
-
-                    if (weatherForecastElement.getRain().get3h()!=null){
-                        rain_data_list.add(weatherForecastElement.getRain().get3h());
-                        Log.e("My Tag: ","   "+weatherForecastElement.getRain().get3h());
-                        Date date = new Date(weatherForecastElement.getDt()*1000L);
-                        SimpleDateFormat jdf = new SimpleDateFormat("yyMMddHHmmssZ");
-                        jdf.setTimeZone(TimeZone.getTimeZone("GMT-4"));
-                        String java_date = jdf.format(date).substring(0,12);
-                  //      Log.e("mY Tag: Date: ",java_date);
-
-
-                    }
-                    else {
-                        rain_data_list.add(0.00);
-                        Log.e("My Tag: ","   0");
-
-                    }
-                }
-                applyEquations(rain_data_list);
-                //double rain  = extendedWeather.getList().get(1).getRain().get3h();
-                //Toast.makeText(MainActivity.this,"HJVHBKJ "+rain,Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.e("5", "Five Day Forecast request failed: " + t.getMessage());
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,SelectFile.class);
+                startActivity(intent);
             }
         });
+        go_to_map.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+
+        addCordinates();
+
+        for ( Coord c: locationModels){
+            rain_data_list.clear();
+            final double lat_c = c.getLat();
+            final double lon_c = c.getLon();
+            mOWService.getFiveDayForecast(c, new OWRequestListener<ExtendedWeather>() {
+                @Override
+                public void onResponse(OWResponse<ExtendedWeather> response) {
+                    ExtendedWeather extendedWeather = response.body();
+                    //Do something with the object here!
+
+                    for (WeatherForecastElement weatherForecastElement : extendedWeather.getList()){
+
+                        if (weatherForecastElement.getRain().get3h()!=null){
+                            rain_data_list.add(weatherForecastElement.getRain().get3h());
+                            Log.e("My Tag: ","   "+weatherForecastElement.getRain().get3h());
+                            Date date = new Date(weatherForecastElement.getDt()*1000L);
+                            SimpleDateFormat jdf = new SimpleDateFormat("yyMMddHHmmssZ");
+                            jdf.setTimeZone(TimeZone.getTimeZone("GMT-4"));
+                            String java_date = jdf.format(date).substring(0,12);
+
+
+
+                        }
+                        else {
+                            rain_data_list.add(0.00);
+                            Log.e("My Tag: ","   0");
+
+                        }
+
+                    }
+                    applyEquations(rain_data_list,lat_c,lon_c);
+
+
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    Log.e("5", "Five Day Forecast request failed: " + t.getMessage());
+                }
+            });
+        }
+
+
+    }
+});
     }
 
 
-    public void applyEquations(List<Double> rain_list){
+    public void applyEquations(List<Double> rain_list,double lat,double lon){
 
         List<Double> my_list = rain_list;
         Collections.reverse(my_list);
@@ -105,17 +133,20 @@ public class MainActivity extends AppCompatActivity {
         RainModel total_rain = quantify_rainfall(rain_fall_sum_day_1,rain_fall_sum_day_2,rain_fall_sum_day_3,rain_fall_sum_day_4);
         //will return rain object here, with total rain and number of hourse of event
         int result = classify_rainfall(total_rain);
-        DAOModel daoModel = new DAOModel();
-        daoModel.setLat(31.0439);
-        daoModel.setLon(78.8418);
-        daoModel.setResult(result);
-        tinyDB.putString("rain","light");
-        tinyDB.putDouble("lat",31.0439);
-        tinyDB.putDouble("lon",78.8418);
-        tinyDB.putObject("dao",daoModel);
+        LocationModel locationModel = new LocationModel();
+        locationModel.setResult(result);
+        locationModel.setLatitude(lat);
+        locationModel.setLongitude(lon);
+        dao_list.add(locationModel);
+        if(dao_list.size()==7){
+            daoModel.setLocation_models(dao_list);
+            tinyDB.putObject("dao",daoModel);
+            Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+            startActivity(intent);
 
-        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
-        startActivity(intent);
+        }
+
+
     }
 
 
@@ -175,6 +206,33 @@ else {
             return 1;
         }
 
+    }
+    public List<Coord> addCordinates(){
+        locationModels.clear();
+        Coord coordinate = new Coord();
+        coordinate.setLat(30.00);
+        coordinate.setLon(78.25);
+        locationModels.add(coordinate);
+        coordinate.setLat(30.25);
+        coordinate.setLon(78.25);
+        locationModels.add(coordinate);
+        coordinate.setLat(30.50);
+        coordinate.setLon(78.25);
+        locationModels.add(coordinate);
+        coordinate.setLat(30.75);
+        coordinate.setLon(78.25);
+        locationModels.add(coordinate);
+        coordinate.setLat(30.75);
+        coordinate.setLon(78.50);
+        locationModels.add(coordinate);
+        coordinate.setLat(31.00);
+        coordinate.setLon(78.50);
+        locationModels.add(coordinate);
+        coordinate.setLat(31.00);
+        coordinate.setLon(78.75);
+        locationModels.add(coordinate);
+       // Log.e("My List Size : ", locationModels.size()+"");
+        return locationModels;
     }
 
 
